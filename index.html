@@ -4,51 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COC Emote Viewer</title>
-  <!-- Load Google's model-viewer component -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
   <style>
     body { margin: 0; padding: 0; background-color: #121212; font-family: sans-serif; height: 100vh; overflow: hidden; display: flex; }
-    
-    /* Center the 3D model */
     model-viewer { width: 100vw; height: 100vh; flex-grow: 1; }
-
-    /* Container for the emote buttons on the right side */
     .emote-panel {
       position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
       display: flex; flex-direction: column; gap: 10px; padding: 10px;
       background: rgba(0,0,0,0.7); border-radius: 10px; border: 1px solid #444; z-index: 10;
     }
-
     button {
       padding: 12px 18px; font-size: 14px; font-weight: bold; cursor: pointer;
       color: white; background: #2a2a2a; border: 2px solid #555; border-radius: 5px;
       transition: all 0.2s ease;
     }
-
     button:hover { background: #ffcc00; color: #121212; border-color: #ffcc00; }
     button:active { transform: scale(0.95); }
   </style>
 </head>
 <body>
-
-  <!-- The 3D model viewer pointing to our character file -->
   <model-viewer 
     id="charViewer"
-    src="clash_char.glb" 
-    alt="Barbarian Model" 
+    src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Fox/glTF-Binary/Fox.glb" 
+    alt="3D Character" 
     camera-controls 
     auto-rotate
     shadow-intensity="2"
-    exposure="1.2"
-    interaction-prompt="none">
+    exposure="1.2">
   </model-viewer>
 
-  <!-- Side Panel for Emote Buttons -->
   <div class="emote-panel">
-    <button onclick="playEmote('Happy', 'happy_sfx.mp3')">Hee Hee!</button>
-    <button onclick="playEmote('Angry', 'angry_sfx.mp3')">Grrr!</button>
-    <button onclick="playEmote('Cry', 'cry_sfx.mp3')">Auuugh!</button>
-    <button onclick="playEmote('Celebrate', 'dance_sfx.mp3')">Celebrate!</button>
+    <button onclick="playEmote('Survey', 'happy_sfx.mp3')">Hee Hee!</button>
+    <button onclick="playEmote('Walk', 'angry_sfx.mp3')">Grrr!</button>
+    <button onclick="playEmote('Run', 'cry_sfx.mp3')">Auuugh!</button>
   </div>
 
   <script>
@@ -56,15 +44,10 @@
     let currentAudio = null;
 
     function playEmote(animationName, soundFile) {
-      // 1. Play the specific animation clip stored inside the .glb
       viewer.animationName = animationName;
-
-      // 2. Play the synchronized sound effect
-      if (currentAudio) {
-        currentAudio.pause(); // Stop previous sound if playing
-      }
+      if (currentAudio) { currentAudio.pause(); }
       currentAudio = new Audio('sfx/' + soundFile);
-      currentAudio.play();
+      currentAudio.play().catch(e => console.log('SFX file missing locally'));
     }
   </script>
 </body>
